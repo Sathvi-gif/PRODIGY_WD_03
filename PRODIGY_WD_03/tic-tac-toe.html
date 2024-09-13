@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tic Tac Toe</title>
+  <style>
+  *{
+        background-color:black;
+    }
+    .board {
+        margin-top: 200px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(3, 1fr);
+      gap: 2px;
+      width: 300px;
+      height: 300px;
+      margin: 0 auto;
+    }
+    .cell {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #ddd;
+      font-size: 3em;
+      cursor: pointer;
+    }
+    #restartButton {
+      display: block;
+      margin: 20px auto;
+      padding: 10px 20px;
+      font-size: 1.2em;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    #result {
+      margin-top: 10px;
+      text-align: center;
+      font-size: 50px;
+      color: #4CAF50;
+    }
+    #heading {
+      text-align: center;
+      font-size: 2em;
+      margin-top: 20px;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+    <div id="heading"><b>Tic Tac Toe Game</b></div>
+<br><br>
+    <div id="result"></div>
+    <br><br>
+  <div class="board" onclick="handleClick(event)">
+    <div class="cell" data-index="0"></div>
+    <div class="cell" data-index="1"></div>
+    <div class="cell" data-index="2"></div>
+    <div class="cell" data-index="3"></div>
+    <div class="cell" data-index="4"></div>
+    <div class="cell" data-index="5"></div>
+    <div class="cell" data-index="6"></div>
+    <div class="cell" data-index="7"></div>
+    <div class="cell" data-index="8"></div>
+  </div>
+
+  <button id="restartButton" onclick="restartGame()">Restart Game</button>
+
+  
+
+  <script>
+    let currentPlayer = 'X';
+    const cells = document.querySelectorAll('.cell');
+    let gameEnded = false;
+
+    function checkWinner() {
+      const winningConditions = [
+        [0, 1, 2], [3, 4, 5], [6, 7, 8], // rows
+        [0, 3, 6], [1, 4, 7], [2, 5, 8], // columns
+        [0, 4, 8], [2, 4, 6] // diagonals
+      ];
+
+      for (let condition of winningConditions) {
+        const [a, b, c] = condition;
+        if (cells[a].innerText && cells[a].innerText === cells[b].innerText && cells[a].innerText === cells[c].innerText) {
+          cells[a].style.backgroundColor = cells[b].style.backgroundColor = cells[c].style.backgroundColor = 'lightgreen';
+          gameEnded = true;
+          document.getElementById('result').innerText = `${currentPlayer} wins!`;
+          return;
+        }
+      }
+
+      if ([...cells].every(cell => cell.innerText)) {
+        gameEnded = true;
+        document.getElementById('result').innerText = "It's a tie!";
+      }
+    }
+
+    function handleClick(event) {
+      if (gameEnded) return;
+      const cell = event.target;
+      if (cell.innerText) return;
+
+      cell.innerText = currentPlayer;
+      cell.style.backgroundColor = 'white';
+
+      checkWinner();
+      currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+    }
+
+    function restartGame() {
+      cells.forEach(cell => {
+        cell.innerText = '';
+        cell.style.backgroundColor = '#ddd';
+      });
+      gameEnded = false;
+      currentPlayer = 'X';
+      document.getElementById('result').innerText = '';
+    }
+  </script>
+</body>
+</html>
